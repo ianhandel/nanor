@@ -4,12 +4,14 @@
 \alias{nano_means}
 \title{Combine all runs on a day / case by simple arithmetic mean}
 \usage{
-nano_means(df, count_var = count)
+nano_means(df, mean_var = count, ...)
 }
 \arguments{
 \item{df}{Dataframe holding nano data}
 
-\item{count_vat}{column holding particle counts}
+\item{mean_var}{column holding to aggregate to mean}
+
+\item{...}{variables to aggregate on}
 }
 \description{
 Combine all runs on a day / case by simple arithmetic mean

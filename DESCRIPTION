@@ -7,11 +7,14 @@ Authors@R:
            role = c("aut", "cre"),
            email = "first.last@example.com")
 Description: What the package does (one paragraph).
-License: What license it uses
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
     dplyr,
-    magrittr
+    magrittr,
+    rlang
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
+Suggests: 
+    testthat

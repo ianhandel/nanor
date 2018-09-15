@@ -2,57 +2,17 @@
 #'
 #'
 #' @param df Dataframe holding nano data
-#' @param count_vat column holding particle counts
+#' @param mean_var column holding to aggregate to mean
+#' @param ... variables to aggregate on
 #'
 #' @export
-nano_means <- function(df, count_var = count){
-  count_var <- dplyr::enquo(count_var)
+nano_means <- function(df, mean_var = count, ...){
+  count <- `:=` <-  NULL # to survive CRAN checks
+  mean_var <- rlang::enquo(mean_var)
+  result_var <- rlang::sym(paste0(rlang::quo_text(mean_var), "_mean"))
+  group_vars <- rlang::enquos(...)
   df %>%
-  dplyr::group_by_at(dplyr::vars(-!!count_var)) %>%
-  dplyr::summarise(mean_count = mean(!!count_var, na.rm = TRUE)) %>%
+  dplyr::group_by_at(dplyr::vars(!!!group_vars)) %>%
+  dplyr::summarise(!!result_var := mean(!!mean_var, na.rm = TRUE)) %>%
   dplyr::ungroup()
 }
-
-# adds AUC (sum count)
-add_auc <- function(df){
-  df %>%
-  mutate(AUC = sum(count, na.rm = TRUE)) %>%
-  mutate(AUC_USG = AUC / USG) %>%
-  mutate(AUC_CREAT = AUC / CREAT) %>%
-  mutate(AUC_EGFR = AUC / EGFR)
-}
-
-# add_auc_slices <- function(df, from, to){
-#   df %>%
-#     group_by_at(vars(-size, -count)) %>%
-#     filter(size >= from, size < to) %>%
-#     mutate(auc_slice = sum(count, na.rm = TRUE)) %>%
-#     ungroup() %>%
-#     select(patient, auc_slice) %>%
-#     distinct() %>%
-#     set_names(c("patient", str_c("slice_", str_pad(from, 3, "left", "0"),
-#                                  "_",
-#                                  str_pad(to, 3, "left", 0))))
-# }
-
-
-
-
-
-
-
-#
-# record…
-# 0-150 sub AUC (small) / 150 - 500 sub AUC (large)
-#
-# record...
-# sub AUC 20-50, 50 - 80 etc
-#
-#
-# for each of these record them /UrCR, /USG, /AUC and /(small / large AUC)
-#
-#
-#
-# (no point dividing as a ratio!)
-#
-# then join all these to coin path data, label by filename, case, day, species
