@@ -9,7 +9,7 @@ nano_means <- function(df, count_var = count){
   count_var <- dplyr::enquo(count_var)
   df %>%
   dplyr::group_by_at(dplyr::vars(-!!count_var)) %>%
-  dplyr::summarise(count = mean(!!count_var, na.rm = TRUE)) %>%
+  dplyr::summarise(mean_count = mean(!!count_var, na.rm = TRUE)) %>%
   dplyr::ungroup()
 }
 
